@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/tic_tac_toe/bloc/tic_tac_toe_bloc.dart';
-
+import 'package:lottie/lottie.dart';
 import '../../theme/colors.dart';
 
 class TicTacToePage extends StatelessWidget {
@@ -51,63 +51,65 @@ class Board extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TicTacToeBloc, TicTacToeState>(
-      builder: (context, state) {
-        return AbsorbPointer(
-          absorbing: state.status != GameStatus.playing,
-          child: Container(
-            margin: const EdgeInsets.all(10),
+    return EndGameIndicator(
+      child: BlocBuilder<TicTacToeBloc, TicTacToeState>(
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state.status != GameStatus.playing,
+            child: Container(
+              margin: const EdgeInsets.all(10),
 
-            ///Widget that builds the Board
-            child: GridView.count(
-              physics: const ClampingScrollPhysics(),
-              crossAxisCount: 3,
-              children: [
-                ///For that evaluates the value of each cell
-                for (var i = 0; i < state.board.length; i++)
-                  Builder(
-                    builder: (context) {
-                      final value = state.board[i];
-                      final isX = value < 0;
-                      final isO = value > 0;
-                      final text = () {
-                        if (isX) {
-                          return 'O';
-                        }
-                        if (isO) return 'X';
-                        return ' ';
-                      }();
+              ///Widget that builds the Board
+              child: GridView.count(
+                physics: const ClampingScrollPhysics(),
+                crossAxisCount: 3,
+                children: [
+                  ///For that evaluates the value of each cell
+                  for (var i = 0; i < state.board.length; i++)
+                    Builder(
+                      builder: (context) {
+                        final value = state.board[i];
+                        final isX = value < 0;
+                        final isO = value > 0;
+                        final text = () {
+                          if (isX) {
+                            return 'O';
+                          }
+                          if (isO) return 'X';
+                          return ' ';
+                        }();
 
-                      /// Widget that represents every cell
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        color: MainColor.secondaryColor,
-                        elevation: 5,
-                        child: InkWell(
-                          onTap: () {
-                            context.read<TicTacToeBloc>().add(
-                                  TicTacToeCellClicked(i),
-                                );
-                          },
-                          child: Center(
-                            child: Text(
-                              text,
-                              style: TextStyle(
-                                color: isX ? MainColor.x : MainColor.o,
-                                fontSize: 40,
+                        /// Widget that represents every cell
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          color: MainColor.secondaryColor,
+                          elevation: 5,
+                          child: InkWell(
+                            onTap: () {
+                              context.read<TicTacToeBloc>().add(
+                                    TicTacToeCellClicked(i),
+                                  );
+                            },
+                            child: Center(
+                              child: Text(
+                                text,
+                                style: TextStyle(
+                                  color: isX ? MainColor.x : MainColor.o,
+                                  fontSize: 40,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-              ],
+                        );
+                      },
+                    ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -140,6 +142,30 @@ class StatusMessage extends StatelessWidget {
           // width: boardWidth,
         );
       },
+    );
+  }
+}
+
+///Widget that displays the animation in case there is a winner
+class EndGameIndicator extends StatelessWidget {
+  const EndGameIndicator({Key? key, required this.child}) : super(key: key);
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        BlocBuilder<TicTacToeBloc, TicTacToeState>(builder: (context, state) {
+          if (state.status == GameStatus.endGame) {
+            return Container(
+              child: Lottie.network(
+                  'https://assets7.lottiefiles.com/private_files/lf30_kvdn44jg.json'),
+            );
+          }
+          return const SizedBox.shrink();
+        })
+      ],
     );
   }
 }
