@@ -26,7 +26,7 @@ class TicTacToeView extends StatelessWidget {
         backgroundColor: MainColor.primaryColor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Expanded(child: Board())],
+          children: [const StatusMessage(), const Expanded(child: Board())],
         ),
       ),
     );
@@ -59,9 +59,9 @@ class Board extends StatelessWidget {
                       final isO = value > 0;
                       final text = () {
                         if (isX) {
-                          return 'X';
+                          return 'O';
                         }
-                        if (isO) return 'O';
+                        if (isO) return 'X';
                         return ' ';
                       }();
 
@@ -93,6 +93,38 @@ class Board extends StatelessWidget {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class StatusMessage extends StatelessWidget {
+  const StatusMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double boardWidth = MediaQuery.of(context).size.width;
+    return BlocBuilder<TicTacToeBloc, TicTacToeState>(
+      builder: (context, state) {
+        final text = () {
+          if (state.status == GameStatus.tie) {
+            return "It's A Draw";
+          } else if (state.status == GameStatus.endGame) {
+            if (!state.isXTurn) return 'O wins!';
+            return 'X wins!';
+          } else {
+            if (state.isXTurn) return 'X Turn!';
+            return 'O Turn';
+          }
+        }();
+        return SizedBox(
+          child: Text(
+            text,
+            style: const TextStyle(color: Colors.white, fontSize: 40),
+          ),
+          height: boardWidth * 0.3,
+          // width: boardWidth,
         );
       },
     );
