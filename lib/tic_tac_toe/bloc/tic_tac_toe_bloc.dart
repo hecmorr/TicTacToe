@@ -7,6 +7,7 @@ part 'tic_tac_toe_state.dart';
 class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
   TicTacToeBloc() : super(const TicTacToeState()) {
     on<TicTacToeCellClicked>(_onTicTacToeCellClicked);
+    on<TicTacToeRestarted>(_onTicTacToeRestarted);
   }
 
   /// X uses > 0 values and O uses < 0 values
@@ -22,5 +23,12 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
       TicTacToeState(isXTurn: !state.isXTurn, board: newList),
     );
     add(TicTacToeWinnerVerified());
+  }
+
+  void _onTicTacToeRestarted(
+    TicTacToeRestarted event,
+    Emitter<TicTacToeState> emit,
+  ) {
+    emit(const TicTacToeState());
   }
 }

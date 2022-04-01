@@ -26,7 +26,20 @@ class TicTacToeView extends StatelessWidget {
         backgroundColor: MainColor.primaryColor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [const StatusMessage(), const Expanded(child: Board())],
+          children: [
+            const SizedBox(height: 40),
+            const StatusMessage(),
+            const Expanded(child: Board()),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.replay),
+              onPressed: () {
+                context.read<TicTacToeBloc>().add(TicTacToeRestarted());
+              },
+              label: const Text('Restart Game'),
+              style: ElevatedButton.styleFrom(primary: MainColor.accentColor),
+            ),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );
