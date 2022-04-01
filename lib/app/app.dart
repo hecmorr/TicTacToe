@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/tic_tac_toe/view/tic_tac_toe_view.dart';
+import 'package:tic_tac_toe/tic_tac_toe/view/tic_tac_toe_page.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
