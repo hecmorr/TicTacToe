@@ -17,7 +17,8 @@ A flutter application that allows you to play the famous Tic Tac Toe game.
 ### App Preview
 
 
-![2022-02-13_13h47_12](https://user-images.githubusercontent.com/37377399/153772284-0a433c70-0324-415c-9523-a05907817e93.png)
+![2022-04-22_13h32_46](https://user-images.githubusercontent.com/37377399/164782383-d56e0de2-a78f-4822-b315-5d26c4c41db5.png)
+
 
 
 ## To get started 
